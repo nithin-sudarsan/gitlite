@@ -7,7 +7,7 @@ from branch import branch
 from clone import clone
 
 def welcomeMessage():
-    print("GitLite by Nithin!")
+    print("Welcome to GitLite!")
     print("Available commands:")
     print("\tinit: Initializes an empty gitlite repository")
     print("\tadd: Adds files to staging")
@@ -22,14 +22,17 @@ def main():
     subparser = parser.add_subparsers(dest="command", help="Subcommand help")
 
     init_parser = subparser.add_parser("init", help = "Initializes an empty gitlite repository")
+    init_parser.add_argument("dir", nargs="?",type=str, help="Create a new directory and intialize repository", default="Empty")
 
     add_parser = subparser.add_parser("add", help = "Adds files to staging")
     add_parser.add_argument("path", nargs="?",type=str, help="Mention file path", default="Empty")
 
     commit_parser = subparser.add_parser("commit", help = "Commit staged files")
     commit_parser.add_argument("-m", nargs="?", type=str, help="Commit message", default="Empty")
+    commit_parser.add_argument("-a", "--amend", nargs="?", type=str, help="Amend to previous commit", default="Empty")
 
     branch_parser = subparser.add_parser("branch", help = "See and modify branches")
+    branch_parser.add_argument("branch", nargs="?", type=str, help="Create a new branch", default="Empty")
     branch_parser.add_argument("-m", nargs="?", type=str, help="Rename current branch", default="Empty")
     branch_parser.add_argument("-d", nargs="?", type=str, help="Delete branch", default="Empty")
 
@@ -47,7 +50,7 @@ def main():
 
     match cmd:
         case "init":
-            err = init(cmd)
+            err = init(cmd, args_dict["dir"])
             if err != None:
                 print(err)
         case "add":
@@ -55,11 +58,11 @@ def main():
             if err != None:
                 print(err)
         case "commit":
-            err = commit(cmd, message=args_dict["m"])
+            err = commit(cmd, message=args_dict["m"], amend=args_dict["amend"])
             if err != None:
                 print(err)
         case "branch":
-            err = branch(cmd, rename=args_dict["m"], delete=args_dict["d"])
+            err = branch(cmd, new_branch=args_dict["branch"], rename=args_dict["m"], delete=args_dict["d"])
             if err != None:
                 print(err)       
         case "checkout":
