@@ -25,7 +25,7 @@ def main():
     init_parser.add_argument("dir", nargs="?",type=str, help="Create a new directory and intialize repository", default="Empty")
 
     add_parser = subparser.add_parser("add", help = "Adds files to staging")
-    add_parser.add_argument("path", nargs="?",type=str, help="Mention file path", default="Empty")
+    add_parser.add_argument("path", nargs="*", type=str, help="Mention file path(s)", default=[])
 
     commit_parser = subparser.add_parser("commit", help = "Commit staged files")
     commit_parser.add_argument("-m", nargs="?", type=str, help="Commit message", default="Empty")
