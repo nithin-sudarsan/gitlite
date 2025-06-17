@@ -23,17 +23,17 @@ def check_status():
         print(f"\nModified files:")
         for file in modified_files:
             print(Fore.RED + f"\t{file}")
-    print(Style.RESET_ALL)
+        print(Style.RESET_ALL)
     if len(unstaged_files) > 0:
         print(f"\nUntracked files:")
         for file in unstaged_files:
             print(Fore.RED + f"\t{file}")
-    print(Style.RESET_ALL)
+        print(Style.RESET_ALL)
     if len(staged_files) > 0:
         print(f"\nStaged files:")
         for file in staged_files:
             print(Fore.GREEN + f"\t{file}")
-    print(Style.RESET_ALL)
+        print(Style.RESET_ALL)
 
 
 def status():

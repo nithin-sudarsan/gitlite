@@ -23,18 +23,15 @@ def calculate_sha1(file_path):
     return sha1_hash.hexdigest()
 
 
-def can_stage(file: str, file_hash: str, staged: dict[str, TreeItem]):
+def check_stage(file: str, file_hash: str, staged: dict[str, TreeItem]):
     if os.path.exists(os.path.join(".gitlite/objects", file_hash)):
         print(f"No latest changes to stage in {file}")
-        return False
+        return file, False
 
     if staged and file in staged and staged[file].hash == file_hash:
-        print(f"""
-Skipped {Fore.RED} {file} {Style.RESET_ALL}(no new changes or already staged)
-              """)
-        return False
+        return file, False
     
-    return True
+    return None, True
 
 def parse_gitignore():
     try:
@@ -44,8 +41,11 @@ def parse_gitignore():
     except:
         return None
     
-def get_all_files():
-    root_dir = '.'
+def get_all_files(root = None):
+    if root!= None:
+        root_dir = root
+    else:
+        root_dir = '.'
     relative_dir_path = []
     for dirpath, _, filenames in os.walk(root_dir, topdown = True):
         for filename in filenames:
