@@ -1,6 +1,7 @@
 import os
 import shutil
 from error import throw_error
+from colorama import Fore
 
 def init_repo(print_msg, new_dir=""):
     # Write logic to intialize repository
@@ -11,9 +12,9 @@ def init_repo(print_msg, new_dir=""):
             os.mkdir(new_dir, 0o777)
             os.chdir(new_dir)
         except FileExistsError:
-            return f"Directory '{new_dir}' already exists."
+            return Fore.RED + f"Directory '{new_dir}' already exists."
         except Exception as e:
-            return f"An error occurred: {e}"
+            return Fore.RED + f"An error occurred: {e}"
             
     dir_name = '.gitlite'
     try:
@@ -25,36 +26,36 @@ def init_repo(print_msg, new_dir=""):
                 with open("index", "w") as f:
                     pass
             except Exception as e:
-                return f"Error creating INDEX file: {e}"
+                return Fore.RED + f"Error creating INDEX file: {e}"
             for c in contents:
                 try:
                     os.makedirs(c, 0o777)
                 except:
-                    return f"Unable to create {c}"
+                    return Fore.RED + f"Unable to create {c}"
 
             try:
                 with open("refs/HEAD", "w") as f:
                     f.write("ref: refs/heads/main\n")
             except Exception as e:
-                return f"Error creating HEAD file: {e}"
+                return Fore.RED + f"Error creating HEAD file: {e}"
             try:
                 with open("refs/heads/main", "w") as f:
                     pass
             except Exception as e:
-                return f"Error creating main branch: {e}"
+                return Fore.RED + f"Error creating main branch: {e}"
 
         except Exception as e:
             return (e)
         if print_msg:
-            return ("Initialised an empty gitLite repository")
+            return (Fore.GREEN + "Initialized an empty gitLite repository!")
         return None
 
     except FileExistsError:
         shutil.rmtree(dir_name, ignore_errors=False)
         init_repo(False, "")
-        return f"Reinitialize gitLite repository in '{os.path.dirname(os.getcwd())}'."
+        return Fore.GREEN + f"Reinitialized gitLite repository in '{os.path.dirname(os.getcwd())}'"
     except Exception as e:
-        return f"An error occurred: {e}"
+        return Fore.RED + f"An error occurred: {e}"
     
 
 def init(cmd:str, dir = None):
