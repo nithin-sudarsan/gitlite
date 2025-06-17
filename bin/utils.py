@@ -35,4 +35,26 @@ Skipped {Fore.RED} {file} {Style.RESET_ALL}(no new changes or already staged)
         return False
     
     return True
-        
+
+def parse_gitignore():
+    try:
+        with open('.gitignore') as f:
+            patterns = f.readlines()
+            return patterns
+    except:
+        return None
+    
+def get_all_files():
+    root_dir = '.'
+    relative_dir_path = []
+    for dirpath, _, filenames in os.walk(root_dir, topdown = True):
+        for filename in filenames:
+            if filename.startswith('.'):
+                continue
+            required_paths = os.path.relpath(os.path.join(dirpath, filename), root_dir)
+            if not required_paths.startswith('.'):
+                relative_dir_path.append(required_paths)
+    gitignore_patterns = parse_gitignore()
+    for pattern in gitignore_patterns:
+        relative_dir_path = [path for path in relative_dir_path if pattern not in path]
+    return relative_dir_path

@@ -1,5 +1,6 @@
 import argparse
 from init import init
+from status import status
 from add import add
 from commit import commit
 from checkout import checkout
@@ -10,6 +11,7 @@ def welcomeMessage():
     print("Welcome to GitLite!")
     print("Available commands:")
     print("\tinit: Initializes an empty gitlite repository")
+    print("\tstatus: Check staging status of files in working tree.")
     print("\tadd: Adds files to staging")
     print("\tcommit: Commit staged files")
     print("\tbranch: Creates a new branch")
@@ -23,6 +25,8 @@ def main():
 
     init_parser = subparser.add_parser("init", help = "Initializes an empty gitlite repository")
     init_parser.add_argument("dir", nargs="?",type=str, help="Create a new directory and intialize repository", default="Empty")
+
+    status_parser = subparser.add_parser("status", help = "Check staging status of files in working tree.")
 
     add_parser = subparser.add_parser("add", help = "Adds files to staging")
     add_parser.add_argument("path", nargs="*", type=str, help="Mention file path(s)", default=[])
@@ -51,6 +55,10 @@ def main():
     match cmd:
         case "init":
             err = init(cmd, args_dict["dir"])
+            if err != None:
+                print(err)
+        case "status":
+            err = status()
             if err != None:
                 print(err)
         case "add":
