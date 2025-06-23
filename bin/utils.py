@@ -5,6 +5,7 @@ import sys
 from colorama import Fore, Style
 import pickle
 from bin.CommitObject import CommitObject
+import copy
 
 def welcomeMessage():
     print("Welcome to GitLite!")
@@ -119,3 +120,19 @@ def get_TreeItems(staged: dict) -> list:
             yield from get_TreeItems(value)
         else:
             yield value
+
+def merge_trees(old_tree: dict, new_tree: dict) -> dict:
+    merged_tree = copy.deepcopy(old_tree)
+
+    for key, new_value in new_tree.items():
+        if key in merged_tree:
+            old_value = merged_tree[key]
+
+            if isinstance(old_value, dict) and isinstance(new_value, dict):
+                merged_tree[key] = merge_trees(old_value, new_value)
+            else:
+                merged_tree[key] = new_value
+        else:
+            merged_tree[key] = new_value
+            
+    return merged_tree

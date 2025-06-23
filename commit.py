@@ -6,7 +6,8 @@ import pickle
 import os
 from colorama import Fore
 import hashlib
-from bin.utils import is_gitlite_initialized, get_curr_branch
+from bin.utils import is_gitlite_initialized, get_curr_branch, merge_trees
+import shutil
 
 def build_tree(staged):
     fs_hierarchy = {}
@@ -112,8 +113,81 @@ def commit_staged(message: str):
 
 def commit_amend(message: str):
     # write logic to amend to previous commit
-    print(f"Amended to previous commit")
-    print(f"New commit message: {message}")
+    committed = False
+
+   # get current branch
+    curr_branch_path = get_curr_branch()
+
+    # get current commit object
+    object_path = '.gitlite/objects'
+    commit_hash = None
+    commit_object = None
+    old_tree = None
+
+    try:
+        with open(curr_branch_path, 'rb') as f:
+            if len(f.peek()) > 0:
+                commit_hash = pickle.loads(f.read().strip())
+        with open(os.path.join(object_path, commit_hash), 'rb') as f:
+            if len(f.peek()) > 0:
+                commit_object: CommitObject = pickle.loads(f.read())
+        with open(os.path.join(object_path, commit_object.treehash),'rb') as f:
+            if len(f.peek()) > 0:
+                old_tree = pickle.loads(f.read())
+    except Exception as e:
+        print("No previous commits in this branch")
+
+
+    
+    staged:dict[str, TreeItem] = {}
+    staged = read_index(staged) # this "staged" has to be used to construct the tree object.
+    
+    # after getting old tree , add new items from staged to the old tree 
+    new_tree = build_tree(staged)
+    if old_tree:
+        new_tree = merge_trees(old_tree, new_tree)
+    else:
+        return Fore.RED + "Error reading exisiting commit!"
+    
+    new_tree_object = pickle.dumps(new_tree)
+    new_tree_hash = hashlib.sha1(new_tree_object).hexdigest()
+
+    new_tree_object_path = os.path.join(object_path, new_tree_hash)
+    os.makedirs(os.path.dirname(new_tree_object_path), exist_ok=True)
+    with open(new_tree_object_path, 'wb') as f:
+        f.write(new_tree_object)
+
+    if commit_object.treehash != new_tree_hash:
+        # 1. delete old treehash object
+        if os.path.exists(os.path.join(object_path, commit_object.treehash)):
+            os.remove(os.path.join(object_path, commit_object.treehash))
+
+        new_commit_object: CommitObject = CommitObject(message, new_tree_hash, commit_object.parenthash)
+        commit_object_bytes = pickle.dumps(new_commit_object)
+        new_commit_hash = hashlib.sha1(commit_object_bytes).hexdigest()
+
+        commit_obj_path = os.path.join(object_path, new_commit_hash)
+        os.makedirs(os.path.dirname(commit_obj_path), exist_ok=True)
+        with open(commit_obj_path, 'wb') as f:
+            f.write(commit_object_bytes)
+
+        # 2. delete old commithash object
+        if os.path.exists(os.path.join(object_path, commit_hash)):
+            os.remove(os.path.join(object_path, commit_hash))
+
+        # 3. write new commit_object
+        with open(curr_branch_path, 'wb') as f:
+            f.write(pickle.dumps(new_commit_hash))
+            committed = True
+        
+        if committed:
+            with open('.gitlite/index','wb') as f:
+                f.truncate(0)
+        
+        print(Fore.GREEN + f"Amended to previous commit. New commit hash: {new_commit_hash[:5]}")
+        return None
+    else:
+        return Fore.RED + "Error while amending to previous commit"
 
 def commit(cmd:str, message = None, amend = None):
     if not is_gitlite_initialized():
