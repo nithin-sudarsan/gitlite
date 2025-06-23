@@ -1,4 +1,6 @@
 from error import throw_error
+from colorama import Fore
+from bin.utils import is_gitlite_initialized
 
 def show_all_branches():
     # write logic to show all branches
@@ -20,6 +22,8 @@ def delete_branch(branch_name):
 
 
 def branch(cmd: str, new_branch = None, rename = None, delete = None):
+    if not is_gitlite_initialized():
+        return Fore.RED + "Repository not initalized! Run `gitlite init` to initialize repository"
     if new_branch=="Empty" and rename=="Empty" and delete=="Empty": 
         show_all_branches()
     else:

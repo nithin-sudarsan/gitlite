@@ -6,18 +6,7 @@ from commit import commit
 from checkout import checkout
 from branch import branch
 from clone import clone
-
-def welcomeMessage():
-    print("Welcome to GitLite!")
-    print("Available commands:")
-    print("\tinit: Initializes an empty gitlite repository")
-    print("\tstatus: Check staging status of files in working tree.")
-    print("\tadd: Adds files to staging")
-    print("\tcommit: Commit staged files")
-    print("\tbranch: Creates a new branch")
-    print("\tcheckout: Checkout to branch")
-    print("\tclone: Clones a remote repository")
-    print("\thelp: Display this help message")
+from bin.utils import welcomeMessage
 
 def main():
     parser = argparse.ArgumentParser(description = "A lite version of git")
