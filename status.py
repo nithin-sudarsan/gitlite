@@ -51,8 +51,8 @@ def check_status():
         for each in treehashes:
             try:
                 with open(os.path.join(object_path, each), 'rb') as f:
-                    staged = pickle.loads(f.read())
-                    treeItems: list[TreeItem] = list(get_TreeItems(staged))
+                    staged_previous_commit = pickle.loads(f.read())
+                    treeItems: list[TreeItem] = list(get_TreeItems(staged_previous_commit))
                     for item in treeItems:
                         if item.filename not in commit_file_dict.keys():
                             commit_file_dict[item.filename] = item.hash
