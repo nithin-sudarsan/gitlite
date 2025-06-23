@@ -5,7 +5,7 @@ from error import throw_error
 from bin.TreeItem import TreeItem
 from bin.FileType import FileType
 from colorama import Fore,Style
-from bin.utils import check_stage,sha1,get_all_files
+from bin.utils import check_stage,sha1,get_all_files,is_gitlite_initialized
 
 def read_index(staged) -> dict[str, TreeItem]:
     try:
@@ -13,7 +13,7 @@ def read_index(staged) -> dict[str, TreeItem]:
             if len(f.peek()) > 0:
                 staged = pickle.load(f)
         return staged
-    except Exception as e:
+    except:
         return Fore.RED + "Repository not intialized. Run `gitlite init` to initialize repository."
 
 def stage_files(paths, staged, added_files, skipped_files):
@@ -80,8 +80,10 @@ def add_path(paths: list[str]):
         return staged
 
 def add(cmd:str, paths = None):
+    if not is_gitlite_initialized():
+        return Fore.RED + "Repository not initalized! Run `gitlite init` to initialize repository"
     if paths and len(paths):
         err = add_path(paths)
     else:
-        return throw_error(cmd, invalid= True)
+        return throw_error(cmd, invalid= True, initialized = True)
     return err

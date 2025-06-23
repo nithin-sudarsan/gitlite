@@ -4,9 +4,6 @@ from error import throw_error
 from colorama import Fore
 
 def init_repo(print_msg, new_dir=""):
-    # Write logic to intialize repository
-    # if repository already exists, throw error message to def init 
-    #   From def init return that error message instead of None
     if new_dir!="":
         try:
             os.mkdir(new_dir, 0o777)
@@ -59,7 +56,7 @@ def init_repo(print_msg, new_dir=""):
     
 
 def init(cmd:str, dir = None):
-    if dir and dir!="Empty":
+    if dir and dir!="Empty" and len(dir) == 1:
         err = init_repo(True, dir)
     elif dir and dir=="Empty":
         err = init_repo(True, "")

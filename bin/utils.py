@@ -3,6 +3,21 @@ from bin.TreeItem import TreeItem
 import os
 import sys
 from colorama import Fore, Style
+import pickle
+from bin.CommitObject import CommitObject
+import copy
+
+def welcomeMessage():
+    print("Welcome to GitLite!")
+    print("Available commands:")
+    print("\tinit: Initializes an empty gitlite repository")
+    print("\tstatus: Check staging status of files in working tree.")
+    print("\tadd: Adds files to staging")
+    print("\tcommit: Commit staged files")
+    print("\tbranch: Creates a new branch")
+    print("\tcheckout: Checkout to branch")
+    print("\tclone: Clones a remote repository")
+    print("\thelp: Display this help message")
 
 def sha1(file_name) -> str:
     try:
@@ -58,3 +73,66 @@ def get_all_files(root = None):
     for pattern in gitignore_patterns:
         relative_dir_path = [path for path in relative_dir_path if pattern not in path]
     return relative_dir_path
+
+def is_gitlite_initialized():
+    if not os.path.exists('.gitlite'):
+        return False
+    elif os.path.exists('.gitlite/objects') and os.path.exists('.gitlite/refs') and os.path.exists('.gitlite/index') and os.path.exists('.gitlite/refs/HEAD'):
+        return True
+    else:
+        return False
+    
+def get_curr_branch():
+    try:
+        with open(".gitlite/refs/HEAD", "r") as f:
+            head_content = f.readline()
+            curr_branch_path = head_content.split(":")[1].strip()
+            curr_branch = curr_branch_path.split("/")[-1]
+            curr_branch_path = os.path.join('.gitlite', curr_branch_path)
+        return curr_branch_path
+    except Exception as e:
+        print(Fore.RED + f"Error reading HEAD file: {e}")
+        sys.exit(1)
+
+def get_treehashes(object_path, commit_object: CommitObject) -> list:
+    treehashes = []
+    treehashes.append(commit_object.treehash)
+    current_commit = commit_object
+    while current_commit.parenthash:
+        try:
+            # open parent commit_object
+            with open(os.path.join(object_path, commit_object.parenthash), 'rb') as f:
+                if len(f.peek()) > 0:
+                    parent_commit_object: CommitObject = pickle.loads(f.read())
+                    treehashes.append(parent_commit_object.treehash)
+                    current_commit = parent_commit_object
+                else:
+                    print(f"Warning: Parent commit object not found or empty at {os.path.join(object_path, commit_object.parenthash)}")
+                    break
+            
+        except Exception as e:
+            return e
+    return treehashes
+
+def get_TreeItems(staged: dict) -> list:
+    for key, value in staged.items():
+        if isinstance(value, dict):
+            yield from get_TreeItems(value)
+        else:
+            yield value
+
+def merge_trees(old_tree: dict, new_tree: dict) -> dict:
+    merged_tree = copy.deepcopy(old_tree)
+
+    for key, new_value in new_tree.items():
+        if key in merged_tree:
+            old_value = merged_tree[key]
+
+            if isinstance(old_value, dict) and isinstance(new_value, dict):
+                merged_tree[key] = merge_trees(old_value, new_value)
+            else:
+                merged_tree[key] = new_value
+        else:
+            merged_tree[key] = new_value
+            
+    return merged_tree
