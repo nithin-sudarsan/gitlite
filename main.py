@@ -26,7 +26,7 @@ def main():
 
     branch_parser = subparser.add_parser("branch", help = "See and modify branches")
     branch_parser.add_argument("branch", nargs="?", type=str, help="Create a new branch", default="Empty")
-    branch_parser.add_argument("-m", nargs="?", type=str, help="Rename current branch", default="Empty")
+    branch_parser.add_argument("-m", nargs="*", type=str, help="Rename current branch", default="Empty")
     branch_parser.add_argument("-d", nargs="?", type=str, help="Delete branch", default="Empty")
 
     checkout_parser = subparser.add_parser("checkout", help = "Checkout to a branch")
