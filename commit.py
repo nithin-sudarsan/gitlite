@@ -7,7 +7,6 @@ import os
 from colorama import Fore
 import hashlib
 from bin.utils import is_gitlite_initialized, get_curr_branch, merge_trees
-import shutil
 
 def build_tree(staged):
     fs_hierarchy = {}

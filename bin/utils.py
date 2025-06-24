@@ -2,7 +2,7 @@ import hashlib
 from bin.TreeItem import TreeItem
 import os
 import sys
-from colorama import Fore, Style
+from colorama import Fore
 import pickle
 from bin.CommitObject import CommitObject
 import copy

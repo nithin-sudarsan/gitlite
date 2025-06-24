@@ -1,6 +1,6 @@
 import os
 from add import read_index
-from colorama import Fore, Style
+from colorama import Fore
 from bin.TreeItem import TreeItem
 import pickle
 from bin.CommitObject import CommitObject
@@ -87,17 +87,17 @@ def check_status():
         print(f"\nModified files:")
         for file in modified_files:
             print(Fore.RED + f"\t{file}")
-        print(Style.RESET_ALL)
+        print(Fore.RESET)
     if len(unstaged_files) > 0:
         print(f"\nUntracked files:")
         for file in unstaged_files:
             print(Fore.RED + f"\t{file}")
-        print(Style.RESET_ALL)
+        print(Fore.RESET)
     if len(staged_files) > 0:
         print(f"\nStaged files:")
         for file in staged_files:
             print(Fore.GREEN + f"\t{file}")
-        print(Style.RESET_ALL)
+        print(Fore.RESET)
 
 def status():
     if os.path.exists('.gitlite/index'):

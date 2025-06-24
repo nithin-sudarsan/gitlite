@@ -4,7 +4,7 @@ import pickle
 from error import throw_error
 from bin.TreeItem import TreeItem
 from bin.FileType import FileType
-from colorama import Fore,Style
+from colorama import Fore
 from bin.utils import check_stage,sha1,get_all_files,is_gitlite_initialized
 
 def read_index(staged) -> dict[str, TreeItem]:
@@ -67,12 +67,12 @@ def add_path(paths: list[str]):
             print("Skipped (no new changes or already staged): ")
             for file in skipped_files:
                 print(f"\t{file}")
-            print(Style.RESET_ALL)
+            print(Fore.RESET)
         if len(added_files) > 0:
             print("Added: ")
             for file in added_files:
                 print(Fore.GREEN + f"\t{file}")
-            print(Style.RESET_ALL)
+            print(Fore.RESET)
             
         # write to index file
         write_to_index(staged)
