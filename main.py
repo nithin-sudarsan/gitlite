@@ -5,7 +5,7 @@ from add import add
 from commit import commit
 from checkout import checkout
 from branch import branch
-from clone import clone
+from log import log
 from bin.utils import welcomeMessage
 
 def main():
@@ -33,8 +33,8 @@ def main():
     checkout_parser.add_argument("branch", nargs="?", type=str, help="Branch name to checkout to", default="Empty")
     checkout_parser.add_argument("-b", nargs="?", type=str, help="Checkout to a new branch", default="Empty")
 
-    clone_parser = subparser.add_parser("clone", help = "Clone a remote repository")
-    clone_parser.add_argument("hyperlink", nargs="?",type=str, help="HTTPS reference to clone repository", default=None)
+    log_parser = subparser.add_parser("log", help = "Check branch logs")
+    log_parser.add_argument("branch", nargs="?", type=str, help="Branch name to see logs", default="Empty")
    
     args = parser.parse_args()
     args_dict = args.__dict__
@@ -66,10 +66,10 @@ def main():
             err = checkout(cmd, branch_name=args_dict["branch"], new_branch=args_dict["b"])
             if err != None:
                 print(err)
-        case "clone":
-            err = clone(cmd, args_dict["hyperlink"])
+        case "log":
+            err = log(branch_name=args_dict["branch"])
             if err != None:
-                print(err)    
+                print(err)  
         case default:
             welcomeMessage()
 

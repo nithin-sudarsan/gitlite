@@ -136,3 +136,46 @@ def merge_trees(old_tree: dict, new_tree: dict) -> dict:
             merged_tree[key] = new_value
             
     return merged_tree
+
+def get_commit_history(branch_name = None):
+    commit_objects = {}
+    object_path = '.gitlite/objects'
+    if branch_name:
+        branch_path = f".gitlite/refs/heads/{branch_name}"
+    else:
+        branch_path = get_curr_branch()
+    latest_commit_object: CommitObject = None
+    latest_commit_hash = None
+
+    try:
+        with open(branch_path, 'rb') as f:
+            if len(f.peek()) > 0:
+                latest_commit_hash = pickle.load(f)
+        if latest_commit_hash:
+            with open(os.path.join(object_path, latest_commit_hash), 'rb') as f:
+                if len(f.peek()) > 0:
+                    latest_commit_object = pickle.load(f)
+    except:
+        return Fore.RED + f"Error in branch: {branch_path.split('/')[-1]}"
+    
+    if latest_commit_object:
+        commit_objects[latest_commit_hash] = latest_commit_object
+    else:
+        return Fore.RED + "Error: No commits found!"
+
+    while latest_commit_object.parenthash:
+        try:
+            # open parent commit_object
+            with open(os.path.join(object_path, latest_commit_object.parenthash), 'rb') as f:
+                if len(f.peek()) > 0:
+                    parent_commit_object: CommitObject = pickle.loads(f.read())
+                    commit_objects[latest_commit_object.parenthash] = parent_commit_object
+                    # commit_objects.append(parent_commit_object)
+                    latest_commit_object = parent_commit_object
+                else:
+                    print(f"Warning: Parent commit object not found or empty at {os.path.join(object_path, latest_commit_object.parenthash)}")
+                    break
+            
+        except Exception as e:
+            return e
+    return commit_objects

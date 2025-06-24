@@ -44,13 +44,13 @@ def init_repo(print_msg, new_dir=""):
         except Exception as e:
             return (e)
         if print_msg:
-            return (Fore.GREEN + "Initialized an empty gitLite repository!")
+            return (Fore.GREEN + "Initialized an empty GitLite repository!")
         return None
 
     except FileExistsError:
         shutil.rmtree(dir_name, ignore_errors=False)
         init_repo(False, "")
-        return Fore.GREEN + f"Reinitialized gitLite repository in '{os.path.dirname(os.getcwd())}'"
+        return Fore.GREEN + f"Reinitialized GitLite repository in '{os.path.dirname(os.getcwd())}'"
     except Exception as e:
         return Fore.RED + f"An error occurred: {e}"
     
