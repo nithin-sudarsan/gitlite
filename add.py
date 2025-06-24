@@ -85,5 +85,5 @@ def add(cmd:str, paths = None):
     if paths and len(paths):
         err = add_path(paths)
     else:
-        return throw_error(cmd, invalid= True, initialized = True)
+        return throw_error(cmd, invalid= True)
     return err
