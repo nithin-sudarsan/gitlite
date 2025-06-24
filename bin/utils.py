@@ -114,8 +114,8 @@ def get_treehashes(object_path, commit_object: CommitObject) -> list:
             return e
     return treehashes
 
-def get_TreeItems(staged: dict) -> list:
-    for key, value in staged.items():
+def get_TreeItems(staged: dict):
+    for _, value in staged.items():
         if isinstance(value, dict):
             yield from get_TreeItems(value)
         else:
