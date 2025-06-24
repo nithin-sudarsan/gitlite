@@ -15,7 +15,7 @@ def show_all_branches():
     else:
         for branch in all_branches:
             if branch == curr_branch:
-                print(Fore.GREEN + f"-> {branch}")
+                print(Fore.GREEN + f"-> {branch}" + Fore.RESET)
             else:
                 print(f"   {branch}")
         return None
