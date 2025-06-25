@@ -1,12 +1,13 @@
+#!/usr/bin/env python3
 import argparse
-from init import init
-from status import status
-from add import add
-from commit import commit
-from checkout import checkout
-from branch import branch
-from log import log
-from bin.utils import welcomeMessage
+from gitlite.init import init
+from gitlite.status import status
+from gitlite.add import add
+from gitlite.commit import commit
+from gitlite.checkout import checkout
+from gitlite.branch import branch
+from gitlite.log import log
+from gitlite.bin.utils import welcomeMessage
 
 def main():
     parser = argparse.ArgumentParser(description = "A lite version of git")

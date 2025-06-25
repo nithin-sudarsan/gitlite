@@ -1,11 +1,11 @@
 import os
 import sys
 import pickle
-from error import throw_error
-from bin.TreeItem import TreeItem
-from bin.FileType import FileType
+from gitlite.error import throw_error
+from gitlite.bin.TreeItem import TreeItem
+from gitlite.bin.FileType import FileType
 from colorama import Fore
-from bin.utils import check_stage,sha1,get_all_files,is_gitlite_initialized
+from gitlite.bin.utils import check_stage,sha1,get_all_files,is_gitlite_initialized
 
 def read_index(staged) -> dict[str, TreeItem]:
     try:

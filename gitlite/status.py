@@ -1,10 +1,10 @@
 import os
-from add import read_index
+from gitlite.add import read_index
 from colorama import Fore
-from bin.TreeItem import TreeItem
+from gitlite.bin.TreeItem import TreeItem
 import pickle
-from bin.CommitObject import CommitObject
-from bin.utils import sha1, get_all_files,get_curr_branch,get_treehashes, get_TreeItems
+from gitlite.bin.CommitObject import CommitObject
+from gitlite.bin.utils import sha1, get_all_files,get_curr_branch,get_treehashes, get_TreeItems
 
 def get_current_file_dict():
     all_files = get_all_files()

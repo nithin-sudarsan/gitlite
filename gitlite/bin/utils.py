@@ -1,10 +1,10 @@
 import hashlib
-from bin.TreeItem import TreeItem
+from gitlite.bin.TreeItem import TreeItem
 import os
 import sys
 from colorama import Fore
 import pickle
-from bin.CommitObject import CommitObject
+from gitlite.bin.CommitObject import CommitObject
 import copy
 
 def welcomeMessage():

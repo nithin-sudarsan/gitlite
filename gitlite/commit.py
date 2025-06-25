@@ -1,12 +1,12 @@
-from error import throw_error
-from bin.TreeItem import TreeItem
-from bin.CommitObject import CommitObject
-from add import read_index
+from gitlite.error import throw_error
+from gitlite.bin.TreeItem import TreeItem
+from gitlite.bin.CommitObject import CommitObject
+from gitlite.add import read_index
 import pickle
 import os
 from colorama import Fore
 import hashlib
-from bin.utils import is_gitlite_initialized, get_curr_branch, merge_trees
+from gitlite.bin.utils import is_gitlite_initialized, get_curr_branch, merge_trees
 
 def build_tree(staged):
     fs_hierarchy = {}

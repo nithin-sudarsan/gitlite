@@ -1,12 +1,16 @@
-from error import throw_error
-from branch import create_branch
+from gitlite.error import throw_error
+from gitlite.branch import create_branch
 from colorama import Fore
-from bin.utils import is_gitlite_initialized, get_curr_branch
+from gitlite.bin.utils import is_gitlite_initialized, get_curr_branch
 import os
 
 def switch_to(branch_name, create = False):
+    existing_branches = os.listdir('.gitlite/refs/heads')
     if create:
-        create_branch(branch_name)
+        if branch_name in existing_branches:
+            return Fore.RED + f"Error: Branch '{branch_name}' already exist!"
+        else:
+            create_branch(branch_name)
     checkout_branch_path = os.path.join('.gitlite/refs/heads', branch_name)
     curr_branch_path = get_curr_branch()
     if checkout_branch_path == curr_branch_path:

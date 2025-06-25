@@ -1,6 +1,6 @@
 import os
 import shutil
-from error import throw_error
+from gitlite.error import throw_error
 from colorama import Fore
 
 def init_repo(print_msg, new_dir=""):

@@ -1,25 +1,95 @@
 # GitLite
 A lightweight implementation of Git-like local version control system built from scratch in Python, designed to provide deeper understanding of Git's internal workings. Its core functionality revolves around staging and committing files, managing branches, and tracking file changes using SHA-1 hashes.
 
-To read in detail about the internal working of a version control system, checkout [this blog](notnith.in/blogs/gitlite-internal-working). [⚠️ To be updated]
+To read in detail about the internal working of a version control system, checkout [this blog](notnith.in/blogs/gitlite-internal-working).
 
-## Available features
-- **`init`** : Initializes an empty gitlite repository
-- **`status`** : Showing the status of the working directory, including `staged`, `modified`, and `untracked files`.
-- **`add`** : Adds files for staging
-- **`commit`**: Creates a snapshot of the repository, storing metadata like timestamps, commit messages, and tree hashes.
-    - **`-m`**: Commit message
-    - **`-a` / `--amend`** : Amend to previous commit
-- **`branch`**: See, create and modify branches
-    - **`branch_name`**: Create new branch
-    - **`-m`**: Rename current branch
-    - **`-d`**: Delete a branch (other than current branch)
-- **`checkout`**: Switch between branches
-    - **`branch_name`**: Checkout to a new branch
-    - **`-b`**: Create new branch and checkout to that branch
-- **`log`**: View commit history of current branch
-    - **`branch_name`**: View commit history of a particular branch
-- **`.gitignore` Support**: Implements `.gitignore` parsing to exclude specified files from tracking.
+## Available features and Usage
+### Install python package
+```
+$ pip install gitlite
+```
+OR
+```
+$ pip install gitlite==0.3.1
+```
+### `gitlite init`
+Initializes an empty gitlite repository
+```
+$ gitlite init
+```
+### `gitlite add`
+Add files for staging
+```
+$ gitlite add <file-name1> <file-name2>
+```
+### `gitlite status`
+View status of the working directory, including `staged`, `modified`, and `untracked files`.
+```
+$ gitlite status
+```
+### `gitlite commit`
+Creates a snapshot of the repository, storing metadata like timestamps, commit messages, and tree hashes.
+- **`-m`**: Commit message
+- **`-a` / `--amend`** : Amend to previous commit
+```
+$ gitlite commit -m <commit-message>
+```
+#### Amend to previous commit
+```
+$ gitlite commit -a <new-commit-message>
+```
+### `gitlite branch`
+View, create and modify branches
+- **`branch_name`**: Create new branch
+- **`-m`**: Rename current branch
+- **`-d`**: Delete a branch (other than current branch)
+#### View all branches
+```
+$ gitlite branch
+```
+#### Create a branch
+```
+$ gitlite branch <branch-name>
+```
+#### Rename a branch
+```
+$ gitlite branch -m <new-branch-name>
+```
+OR
+```
+$ gitlite branch -m <old-branch-name> <new-branch-name>
+```
+#### Delete a branch (other than current branch)
+```
+$ gitlite branch -d <branch-name>
+```
+### `gitlite checkout`
+Switch between branches
+- **`branch_name`**: Checkout to a new branch
+- **`-b`**: Create new branch and checkout to that branch
+```
+$ gitlite checkout <branch-name>
+```
+### Create a new branch and checkout
+```
+$ gitlite checkout -b <new-branch-name>
+```
+### `gitlite log`
+View commit history of current branch
+- **`branch_name`**: View commit history of a particular branch
+```
+$ gitlite log <branch-name>
+```
+#### Current branch logs
+```
+$ gitlite log
+```
+### `.gitignore` Support 
+Implements `.gitignore` parsing to exclude specified files from tracking.
+### Further help
+```
+$ gitlite --help
+```
 
 ## Architecture:
 

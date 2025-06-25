@@ -1,6 +1,6 @@
-from error import throw_error
+from gitlite.error import throw_error
 from colorama import Fore
-from bin.utils import is_gitlite_initialized, get_curr_branch
+from gitlite.bin.utils import is_gitlite_initialized, get_curr_branch
 import os
 import shutil
 
