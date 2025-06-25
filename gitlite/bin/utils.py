@@ -70,8 +70,9 @@ def get_all_files(root = None):
             if not required_paths.startswith('.'):
                 relative_dir_path.append(required_paths)
     gitignore_patterns = parse_gitignore()
-    for pattern in gitignore_patterns:
-        relative_dir_path = [path for path in relative_dir_path if pattern not in path]
+    if gitignore_patterns!=None:
+        for pattern in gitignore_patterns:
+            relative_dir_path = [path for path in relative_dir_path if pattern not in path]
     return relative_dir_path
 
 def is_gitlite_initialized():

@@ -40,6 +40,11 @@ def init_repo(print_msg, new_dir=""):
                     pass
             except Exception as e:
                 return Fore.RED + f"Error creating main branch: {e}"
+            try:
+                with open(os.path.join(os.pardir, ".gitignore"), "w") as f:
+                    pass
+            except Exception as e:
+                return Fore.RED + f"Error creating .gitignore: {e}"
 
         except Exception as e:
             return (e)

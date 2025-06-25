@@ -1,7 +1,7 @@
 # GitLite
 A lightweight implementation of Git-like local version control system built from scratch in Python, designed to provide deeper understanding of Git's internal workings. Its core functionality revolves around staging and committing files, managing branches, and tracking file changes using SHA-1 hashes.
 
-To read in detail about the internal working of a version control system, checkout [this blog](notnith.in/blogs/gitlite-internal-working).
+For more in-depth details on internal working of a version control system, checkout <a href="https://notnith.in/blogs/gitlite-internal-working" target = "_blank">this blog</a>.
 
 ## Available features and Usage
 ### Install python package

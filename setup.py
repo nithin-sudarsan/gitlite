@@ -9,7 +9,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name="gitlite",
-    version="0.3.2",
+    version="0.3.5",
     packages=find_packages(),
     install_requires=parse_requirements("requirements.txt"),
     entry_points={
